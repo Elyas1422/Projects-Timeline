@@ -25,5 +25,6 @@ import javafx.stage.Stage;
 public class lab22_a  {
   public static void main(String[] args) {
    System.out.println("No");
+   System.out.println("i fixed some issues.");
   }
 }
