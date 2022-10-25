@@ -26,5 +26,6 @@ public class lab22_a  {
   public static void main(String[] args) {
    System.out.println("No");
    System.out.println("i fixed no issues.");
+   System.out.print("test subject");
   }
 }
