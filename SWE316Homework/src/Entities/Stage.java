@@ -12,6 +12,7 @@ public class Stage {
 	private int oldvalue;
 	private int textFlag;
 	private Date time;
+	private boolean progress;
 	
 	public Stage(char changeIndicator, Date date, int documentNumber,
 			String fieldName, int newValue, String objectValue,
@@ -26,6 +27,7 @@ public class Stage {
 		this.oldvalue = oldvalue;
 		this.textFlag = textFlag;
 		this.time = time;
+		checkProgress();
 		
 	}
 	
@@ -63,5 +65,16 @@ public class Stage {
 
 	public Date getTime() {
 		return time;
+	}
+	
+	public boolean getProgress() {
+		return progress;
+	}
+	
+	private void checkProgress() {
+		if(oldvalue < newValue)
+			progress = true;
+		else
+			progress = false;
 	}
 }
