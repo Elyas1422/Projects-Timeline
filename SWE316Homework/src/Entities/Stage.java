@@ -5,7 +5,6 @@ import java.util.Date;
 public class Stage {
 	private char changeIndicator;
 	private Date date;
-	private int documentNumber;
 	private String fieldName;
 	private int newValue;
 	private String objectValue;
@@ -14,13 +13,12 @@ public class Stage {
 	private Date time;
 	private boolean progress;
 	
-	public Stage(char changeIndicator, Date date, int documentNumber,
-			String fieldName, int newValue, String objectValue,
-			int oldvalue, int textFlag, Date time) {
+	public Stage(char changeIndicator, Date date, String fieldName,
+			int newValue, String objectValue, int oldvalue,
+			int textFlag, Date time) {
 		
 		this.changeIndicator = changeIndicator;
 		this.date = date;
-		this.documentNumber = documentNumber;
 		this.fieldName = fieldName;
 		this.newValue = newValue;
 		this.objectValue = objectValue;
@@ -37,10 +35,6 @@ public class Stage {
 
 	public Date getDate() {
 		return date;
-	}
-
-	public int getDocumentNumber() {
-		return documentNumber;
 	}
 
 	public String getFieldName() {
