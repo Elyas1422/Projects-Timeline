@@ -20,8 +20,10 @@ public class ExcelFileReader{
         
         
         ArrayList<Project> projects = new ArrayList<Project>();         
-            
+        ArrayList<Stage> stages = new ArrayList<Stage>();
+        
         projects = readProject();
+        stages = readStages();
             
     }
     public static ArrayList<Project> readProject() throws ParseException {
@@ -108,9 +110,75 @@ public class ExcelFileReader{
     
     public static ArrayList<Stage> readStages() throws ParseException{
        
+        String baseDirectory = System.getProperty("user.dir");
+        String excelFilePath = baseDirectory + "/data/Stages.xls";         
+        System.out.println("Working Directory = " + baseDirectory);
+        System.out.println("excelFilePath " + excelFilePath);
         
+        try {
+        FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+        Workbook wb = WorkbookFactory.create(inputStream);
+
+        Sheet sheet = wb.getSheetAt(0);  // << gets the first sheet in the workbook
+        DataFormatter formatter = new DataFormatter();
+        int rows = sheet.getLastRowNum();
         
+        Date date = new Date();
+        Date time = new Date();
+        ArrayList<Stage> stages = new ArrayList<Stage>();
+        boolean firstRow = true;
         
-        return null;
+        for (Row row : sheet) {
+            
+            if(firstRow) {firstRow=false; continue;}
+            
+            int documentNumber, textFlag, newValue, oldValue;
+            documentNumber = textFlag = newValue = oldValue = 0;
+            char changeIndicator = ' ';
+            String objectValue,fieldName;
+            objectValue = fieldName = "";
+            
+            for (Cell cell : row) {
+                
+                String letter = CellReference.convertNumToColString(cell.getColumnIndex());
+                
+                switch (letter) {
+                    case "A":
+                        objectValue = cell.getRichStringCellValue().getString();
+                        break;
+                    case "B":
+                        documentNumber = (int) cell.getNumericCellValue();
+                        break;
+                    case "C":
+                        fieldName = cell.getRichStringCellValue().getString();
+                        break;
+                    case "D":
+                        changeIndicator = cell.getRichStringCellValue().getString().charAt(0);
+                        break;
+                    case "E":
+                        textFlag = (int) cell.getNumericCellValue();
+                        break;
+                    case "F":
+                        newValue = (int) cell.getNumericCellValue();
+                        break;
+                    case "G":
+                        oldValue = (int) cell.getNumericCellValue();
+                        break;
+                    default:
+                        System.out.println("Unknown");
+                }
+            }
+            Stage newStage = new Stage(changeIndicator, date, documentNumber,
+                    fieldName, newValue, objectValue,
+                    oldValue, textFlag, time );
+            stages.add(newStage);
+        }
+        
+        return stages;
+        
+      } catch(IOException e){
+            System.out.println(e.toString());
+            return null;
+        }
     }
 }
