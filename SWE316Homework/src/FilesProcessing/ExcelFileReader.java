@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
@@ -119,12 +120,10 @@ public class ExcelFileReader{
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
         Workbook wb = WorkbookFactory.create(inputStream);
 
-        Sheet sheet = wb.getSheetAt(0);  // << gets the first sheet in the workbook
-        DataFormatter formatter = new DataFormatter();
-        int rows = sheet.getLastRowNum();
+        Sheet sheet = wb.getSheetAt(0);  
         
-        Date date = new Date();
-        Date time = new Date();
+        Date date = null;
+        Date time = null;
         ArrayList<Stage> stages = new ArrayList<Stage>();
         boolean firstRow = true;
         
@@ -168,6 +167,8 @@ public class ExcelFileReader{
                         System.out.println("Unknown");
                 }
             }
+            
+            Date[] dateTime = StagesDetail(documentNumber); date = dateTime[0]; time = dateTime[1];
             Stage newStage = new Stage(changeIndicator, date, documentNumber,
                     fieldName, newValue, objectValue,
                     oldValue, textFlag, time );
@@ -175,6 +176,70 @@ public class ExcelFileReader{
         }
         
         return stages;
+        
+      } catch(IOException e){
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+    
+    public static Date[] StagesDetail(int docNumber) throws ParseException{
+        
+        String baseDirectory = System.getProperty("user.dir");
+        String excelFilePath = baseDirectory + "/data/Stages_Detailed.xls";         
+        System.out.println("Working Directory = " + baseDirectory);
+        System.out.println("excelFilePath " + excelFilePath);
+        
+        try {
+        FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+        Workbook wb = WorkbookFactory.create(inputStream);
+
+        Sheet sheet = wb.getSheetAt(0);  
+        DataFormatter formatter = new DataFormatter();
+        int rows = sheet.getLastRowNum();        
+        
+        Date[] info = new Date[2];
+        Date date, time;
+        date = time = null;
+        boolean firstRow = true;
+        boolean skipRow = false;
+        boolean found = false;
+        
+        for (Row row : sheet) {
+            
+            if(found) {break;}
+            if(firstRow) {firstRow=false; continue;}
+            skipRow = false;
+            
+            for (Cell cell : row) {
+                
+                if(skipRow) continue;
+                
+                String letter = CellReference.convertNumToColString(cell.getColumnIndex());
+                String text = formatter.formatCellValue(cell);
+                CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+                switch (letter) {
+                    case "B":
+                        if(docNumber!=cell.getNumericCellValue())
+                            skipRow=true;
+                        break;
+                    case "C":
+                        date = cell.getDateCellValue();
+                        info[0]=date;
+                        break;
+                    case "D":
+                        SimpleDateFormat frame = new SimpleDateFormat("hh:mm:ss aa");
+                        time = frame.parse(frame.format(cell.getDateCellValue()));
+                        info[1]=time;
+                        found=true;
+                    default:
+                        System.out.println("");
+                }
+            }
+            
+        }
+        
+        return info;
         
       } catch(IOException e){
             System.out.println(e.toString());
