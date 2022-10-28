@@ -1,6 +1,10 @@
 package Entities;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+
+import FilesProcessing.ExcelFileReader;
 
 public class Project {
 	private Date changedOn;
@@ -12,11 +16,13 @@ public class Project {
 	private String nodeID;
 	private int stage;
 	private Date startDate;
+	private ArrayList<Stage> stages;
 	
 	public Project(Date changedOn, Date createdOn, String currency, 
 			int customer, String customerProjectID, Date endDate,
 			String nodeID, int stage, Date startDate){
 	
+	    this.stages= new ArrayList<Stage>();
 		this.changedOn = changedOn;
 		this.createdOn = createdOn;
 		this.currency = currency;
@@ -65,4 +71,31 @@ public class Project {
 		return startDate;
 	}
 	
+	public void setStages() {
+	    
+	    try {
+	        
+            ArrayList<Stage> allStages = ExcelFileReader.readStages();
+            boolean found = false;
+            
+            for(int i=0; i<allStages.size(); i++) {
+
+                if(getNodeID().equals(allStages.get(i).getObjectValue())) {
+                    stages.add(allStages.get(i));
+                    found = true;
+                    continue;
+                }
+                if(found) {break;}
+            }
+            
+            
+        } catch (ParseException e) {
+    
+            e.getMessage();
+        }
+	    
+	}
+	public ArrayList<Stage> getStages(){
+	    return this.stages;
+	}
 }

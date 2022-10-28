@@ -24,16 +24,11 @@ public class ExcelFileReader{
            
            String baseDirectory = System.getProperty("user.dir");
            String excelFilePath = baseDirectory + "/data/projects.xls";         
-           System.out.println("Working Directory = " + baseDirectory);
-           System.out.println("excelFilePath " + excelFilePath);
            
            
            FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
            Workbook wb = WorkbookFactory.create(inputStream);
-
-           Sheet sheet = wb.getSheetAt(0);  // << gets the first sheet in the workbook
-           DataFormatter formatter = new DataFormatter();
-           int rows = sheet.getLastRowNum();
+           Sheet sheet = wb.getSheetAt(0);  
            
            ArrayList<Project> projects = new ArrayList<Project>();
            
@@ -103,13 +98,11 @@ public class ExcelFileReader{
        
         String baseDirectory = System.getProperty("user.dir");
         String excelFilePath = baseDirectory + "/data/Stages.xls";         
-        System.out.println("Working Directory = " + baseDirectory);
-        System.out.println("excelFilePath " + excelFilePath);
         
         try {
+            
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
         Workbook wb = WorkbookFactory.create(inputStream);
-
         Sheet sheet = wb.getSheetAt(0);  
         
         Date date = null;
@@ -176,16 +169,11 @@ public class ExcelFileReader{
         
         String baseDirectory = System.getProperty("user.dir");
         String excelFilePath = baseDirectory + "/data/Stages_Detailed.xls";         
-        System.out.println("Working Directory = " + baseDirectory);
-        System.out.println("excelFilePath " + excelFilePath);
-        
+
         try {
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
         Workbook wb = WorkbookFactory.create(inputStream);
-
-        Sheet sheet = wb.getSheetAt(0);  
-        DataFormatter formatter = new DataFormatter();
-        int rows = sheet.getLastRowNum();        
+        Sheet sheet = wb.getSheetAt(0);         
         
         Date[] info = new Date[2];
         Date date, time;
@@ -205,7 +193,6 @@ public class ExcelFileReader{
                 if(skipRow) continue;
                 
                 String letter = CellReference.convertNumToColString(cell.getColumnIndex());
-                String text = formatter.formatCellValue(cell);
                 CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
                 switch (letter) {
                     case "B":
