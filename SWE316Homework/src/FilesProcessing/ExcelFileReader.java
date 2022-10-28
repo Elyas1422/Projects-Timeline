@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
@@ -158,9 +157,8 @@ public class ExcelFileReader{
                         System.out.println("Unknown");
                 }
             }
-            
-            Date[] dateTime = StagesDetail(documentNumber); date = dateTime[0]; time = dateTime[1];
-            Stage newStage = new Stage(changeIndicator, date, documentNumber,
+ 
+            Stage newStage = new Stage(changeIndicator, date,
                     fieldName, newValue, objectValue,
                     oldValue, textFlag, time );
             stages.add(newStage);
