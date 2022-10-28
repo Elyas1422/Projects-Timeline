@@ -16,11 +16,10 @@ public class Project {
 	public Project(Date changedOn, Date createdOn, String currency, 
 			int customer, String customerProjectID, Date endDate,
 			String nodeID, int stage, Date startDate){
-		
+	
 		this.changedOn = changedOn;
 		this.createdOn = createdOn;
 		this.currency = currency;
-		this.customer = customer;
 		this.customerProjectID = customerProjectID;
 		this.endDate = endDate;
 		this.nodeID = nodeID;
@@ -40,9 +39,11 @@ public class Project {
 		return currency;
 	}
 
+
 	public int getCustomer() {
 		return customer;
 	}
+
 
 	public String getCustomerProjectID() {
 		return customerProjectID;
