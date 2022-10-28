@@ -6,7 +6,6 @@ public class Project {
 	private Date changedOn;
 	private Date createdOn;
 	private String currency;
-	private String customer;
 	private String customerProjectID;
 	private Date endDate;
 	private String nodeID;
@@ -14,13 +13,12 @@ public class Project {
 	private Date startDate;
 	
 	public Project(Date changedOn, Date createdOn, String currency, 
-			String customer, String customerProjectID, Date endDate,
-			String nodeID, int stage, Date startDate){
+			String customerProjectID, Date endDate, String nodeID, 
+			int stage, Date startDate){
 		
 		this.changedOn = changedOn;
 		this.createdOn = createdOn;
 		this.currency = currency;
-		this.customer = customer;
 		this.customerProjectID = customerProjectID;
 		this.endDate = endDate;
 		this.nodeID = nodeID;
@@ -38,10 +36,6 @@ public class Project {
 
 	public String getCurrency() {
 		return currency;
-	}
-
-	public String getCustomer() {
-		return customer;
 	}
 
 	public String getCustomerProjectID() {
