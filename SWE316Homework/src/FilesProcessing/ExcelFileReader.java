@@ -17,16 +17,7 @@ import Entities.Stage;
 
 public class ExcelFileReader{    
     
-    public static void main(String[] args) throws ParseException {
-        
-        
-        ArrayList<Project> projects = new ArrayList<Project>();         
-        ArrayList<Stage> stages = new ArrayList<Stage>();
-        
-        projects = readProject();
-        stages = readStages();
-            
-    }
+
     public static ArrayList<Project> readProject() throws ParseException {
 
        try {
