@@ -36,7 +36,7 @@ public class ProjectStage {
     public String toString() {
 	    SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
         String stringDate= DateFor.format(date);
-        return stringDate+", "+textFlag;
+        return stringDate+", "+newValue;
     }
 
     public int getDocumentNumber() {

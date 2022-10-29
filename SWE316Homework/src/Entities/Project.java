@@ -105,5 +105,10 @@ public class Project {
         }
 	    
 	}
+
+    @Override
+    public String toString() {
+        return customerProjectID + " stage=" +stage ;
+    }
 	
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.Style;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -30,35 +31,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import Entities.Project;
 import Entities.ProjectStage;
 import FilesProcessing.ExcelFileReader;
-public class TimelineDraw extends Application {
-    public static void main(String[] args) throws ParseException {
-        launch(args);
-    }
-    public void start(Stage arg0) throws Exception {
-        
-        ArrayList<Project> p = ExcelFileReader.readProject();
-        p.get(0).setStages();
-        System.out.println(p.get(0).getDuration());
-        System.out.println();
-        ArrayList<ProjectStage> s = p.get(0).getStages();
-        Scene scene = new Scene(getTimeLineDraw(s)); 
-        arg0.setTitle("Lab22");
-        arg0.setScene(scene);
-        arg0.show();
-    }
-    public AnchorPane getTimeLineDraw(ArrayList<ProjectStage> stages) {
-        int s= stages.size();
-         Text startDate=new Text(stages.get(0).toString());
-         startDate.setLayoutX(80);
-         startDate.setLayoutY(20);
+public class TimelineDraw {
+    
+    public static AnchorPane getTimeLineDraw(Project p) {
+        ArrayList<ProjectStage> stages= p.getStages();
+        int s= p.getDuration();
+        Text startDate=new Text(stages.get(0).toString());
+        startDate.setLayoutX(80);
+        startDate.setLayoutY(20);
         AnchorPane container= new AnchorPane();
-       container.getChildren().add(startDate);
+        //container.getChildren().add(startDate);
         HBox x= new HBox();
-        x.setMinHeight(100);
+        x.setMinHeight(150);
         x.setMinWidth(800);
         container.getChildren().add(x);
         Line timeline=new Line();
@@ -66,19 +55,83 @@ public class TimelineDraw extends Application {
         timeline.setEndY(50);
         timeline.setStartX(100);
         timeline.setEndX(700);
-        for (int i=0; i<s;i++) {
-            Line stage= new Line();
-            stage.setStartY(30);
-            stage.setEndY(80);
-            stage.setStartX(100+600*(((1.0)*i)/s));
-            stage.setEndX(100+600*(((1.0)*i)/s));
-            container.getChildren().add(stage);
+        ArrayList<VBox> linesList= new ArrayList<VBox>();
+        for (int i=0; i<=s;i++) {
+            VBox linebox =new VBox();
+            Text date = new Text();
+            linebox.getChildren().add(date);
+            Line stageLine= new Line();
+            stageLine.setStartY(40);
+            stageLine.setEndY(50);
+            linebox.setLayoutY(30);
+            linebox.setLayoutX(100+600*(((1.0)*i)/s));
+            linebox.getChildren().add(stageLine);
+            linesList.add(linebox);
+            container.getChildren().add(linebox);
+            
+        }
+        
+        for (ProjectStage ps : stages) {
+            int dif =differenceInDays( stages.get(0),  ps);
+            
+            
+            Text stageText= new Text(ps.getNewValue()+"");
+            if (!(ps.getProgress()))
+                stageText.setFill(Color.RED);
+            linesList.get(dif).getChildren().add(stageText);
+            
+            SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM");
+            String stringDate= DateFor.format(ps.getDate());
+            Text n = (Text)linesList.get(dif).getChildren().get(0);
+            n.setText(stringDate);
+            Line linex = (Line)linesList.get(dif).getChildren().get(1);
+            linex.setStartY(40);
+            linex.setEndY(65);
+
+            
         }
         container.getChildren().add(timeline);
         return container;
     };
-    private int differenceInDays(ProjectStage smaller, ProjectStage larger) {
+    private static int differenceInDays(ProjectStage smaller, ProjectStage larger) {
         return (int) TimeUnit.MILLISECONDS.toDays(larger.getDate().getTime() - smaller.getDate().getTime());  
     }
-   
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
