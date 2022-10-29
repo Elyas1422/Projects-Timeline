@@ -3,6 +3,7 @@ package Entities;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import FilesProcessing.ExcelFileReader;
 
@@ -16,13 +17,13 @@ public class Project {
 	private String nodeID;
 	private int stage;
 	private Date startDate;
-	private ArrayList<Stage> stages;
+	private ArrayList<ProjectStage> stages;
 	
 	public Project(Date changedOn, Date createdOn, String currency, 
 			int customer, String customerProjectID, Date endDate,
 			String nodeID, int stage, Date startDate){
 	
-	    this.stages= new ArrayList<Stage>();
+	    this.stages= new ArrayList<ProjectStage>();
 		this.changedOn = changedOn;
 		this.createdOn = createdOn;
 		this.currency = currency;
@@ -31,6 +32,8 @@ public class Project {
 		this.nodeID = nodeID;
 		this.stage = stage;
 		this.startDate = startDate;
+		
+		
 	}
 	
 	public Date getChangedOn() {
@@ -70,12 +73,19 @@ public class Project {
 	public Date getStartDate() {
 		return startDate;
 	}
+    public ArrayList<ProjectStage> getStages(){
+        return this.stages;
+    }
 	
-	public void setStages() {
+	public int getDuration() {
+        return (int) TimeUnit.MILLISECONDS.toDays(stages.get(stages.size()-1).getDate().getTime() - stages.get(0).getDate().getTime());
+    }
+
+    public void setStages() {
 	    
 	    try {
 	        
-            ArrayList<Stage> allStages = ExcelFileReader.readStages();
+            ArrayList<ProjectStage> allStages = ExcelFileReader.readStages();
             boolean found = false;
             
             for(int i=0; i<allStages.size(); i++) {
@@ -95,7 +105,5 @@ public class Project {
         }
 	    
 	}
-	public ArrayList<Stage> getStages(){
-	    return this.stages;
-	}
+	
 }

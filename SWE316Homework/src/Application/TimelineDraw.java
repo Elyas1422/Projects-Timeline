@@ -1,6 +1,9 @@
 package Application;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -28,40 +31,32 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import Entities.ProjectTimeline;
+import Entities.Project;
+import Entities.ProjectStage;
+import FilesProcessing.ExcelFileReader;
 public class TimelineDraw extends Application {
-    public static void main(String[] args) {
-        Date[] d= new Date[3];
-        d[0]= new Date(2010,0,3);
-        d[1]=new Date(2010,0,10);
-        d[2]=new Date(2010,0,12);
+    public static void main(String[] args) throws ParseException {
         launch(args);
     }
     public void start(Stage arg0) throws Exception {
-        Date[] d= new Date[5];
-        d[0]= new Date(2010-1900,0,3);
-        d[1]=new Date(2010-1900,0,10);
-        d[2]=new Date(2010-1900,0,12);
-        ProjectTimeline p= new ProjectTimeline( "1111", "2222",
-                null);
-        Scene scene = new Scene(getTimeLineDraw(p)); 
+        
+        ArrayList<Project> p = ExcelFileReader.readProject();
+        p.get(0).setStages();
+        System.out.println(p.get(0).getDuration());
+        System.out.println();
+        ArrayList<ProjectStage> s = p.get(0).getStages();
+        Scene scene = new Scene(getTimeLineDraw(s)); 
         arg0.setTitle("Lab22");
         arg0.setScene(scene);
         arg0.show();
     }
-    public AnchorPane getTimeLineDraw(ProjectTimeline p) {
-        int s= p.getStages().length;
-
-        
-        SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
-        String stringDate= DateFor.format(p.getStages()[0]);
-        Text startDate=new Text(stringDate);
-        startDate.setLayoutX(80);
-        startDate.setLayoutY(20);
-        
-        System.out.println(stringDate);
+    public AnchorPane getTimeLineDraw(ArrayList<ProjectStage> stages) {
+        int s= stages.size();
+         Text startDate=new Text(stages.get(0).toString());
+         startDate.setLayoutX(80);
+         startDate.setLayoutY(20);
         AnchorPane container= new AnchorPane();
-        container.getChildren().add(startDate);
+       container.getChildren().add(startDate);
         HBox x= new HBox();
         x.setMinHeight(100);
         x.setMinWidth(800);
@@ -82,5 +77,8 @@ public class TimelineDraw extends Application {
         container.getChildren().add(timeline);
         return container;
     };
+    private int differenceInDays(ProjectStage smaller, ProjectStage larger) {
+        return (int) TimeUnit.MILLISECONDS.toDays(larger.getDate().getTime() - smaller.getDate().getTime());  
+    }
    
 }

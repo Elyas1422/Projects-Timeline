@@ -1,8 +1,9 @@
 package Entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Stage {
+public class ProjectStage {
 	private char changeIndicator;
 	private Date date;
 	private String fieldName;
@@ -12,10 +13,11 @@ public class Stage {
 	private int textFlag;
 	private Date time;
 	private boolean progress;
+	private int documentNumber;
 	
-	public Stage(char changeIndicator, Date date, String fieldName,
+	public ProjectStage(char changeIndicator, Date date, String fieldName,
 			int newValue, String objectValue, int oldvalue,
-			int textFlag, Date time) {
+			int textFlag, Date time, int documentNumber) {
 		
 		this.changeIndicator = changeIndicator;
 		this.date = date;
@@ -25,11 +27,23 @@ public class Stage {
 		this.oldvalue = oldvalue;
 		this.textFlag = textFlag;
 		this.time = time;
+		this.documentNumber=documentNumber; //TODO: replace it with an object of type document
 		checkProgress();
 		
 	}
 	
-	public char getChangeIndicator() {
+	@Override
+    public String toString() {
+	    SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
+        String stringDate= DateFor.format(date);
+        return stringDate+", "+textFlag;
+    }
+
+    public int getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public char getChangeIndicator() {
 		return changeIndicator;
 	}
 
@@ -65,7 +79,16 @@ public class Stage {
 		return progress;
 	}
 	
-	private void checkProgress() {
+	
+	public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    private void checkProgress() {
 		if(oldvalue < newValue)
 			progress = true;
 		else

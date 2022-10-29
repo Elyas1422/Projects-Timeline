@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 
 import Entities.Project;
-import Entities.Stage;
+import Entities.ProjectStage;
 
 public class ExcelFileReader{    
     
@@ -94,7 +94,7 @@ public class ExcelFileReader{
         }
     }
     
-    public static ArrayList<Stage> readStages() throws ParseException{
+    public static ArrayList<ProjectStage> readStages() throws ParseException{
        
         String baseDirectory = System.getProperty("user.dir");
         String excelFilePath = baseDirectory + "/data/Stages.xls";         
@@ -107,7 +107,7 @@ public class ExcelFileReader{
         
         Date date = null;
         Date time = null;
-        ArrayList<Stage> stages = new ArrayList<Stage>();
+        ArrayList<ProjectStage> stages = new ArrayList<ProjectStage>();
         boolean firstRow = true;
         
         for (Row row : sheet) {
@@ -151,13 +151,13 @@ public class ExcelFileReader{
                 }
             }
  
-            Stage newStage = new Stage(changeIndicator, date,
+            ProjectStage newStage = new ProjectStage(changeIndicator, date,
                     fieldName, newValue, objectValue,
-                    oldValue, textFlag, time );
+                    oldValue, textFlag, time,documentNumber );
             stages.add(newStage);
         }
         
-        return stages;
+        return mergeDetails(stages);
         
       } catch(IOException e){
             System.out.println(e.toString());
@@ -209,7 +209,7 @@ public class ExcelFileReader{
                         info[1]=time;
                         found=true;
                     default:
-                        System.out.println("");
+                        String  x= null;
                 }
             }
             
@@ -221,5 +221,15 @@ public class ExcelFileReader{
             System.out.println(e.toString());
             return null;
         }
+    }
+    private static ArrayList<ProjectStage> mergeDetails(ArrayList<ProjectStage> stages) throws ParseException {
+        for (int i =0; i<stages.size();i++) {
+            ProjectStage stage=stages.get(i);
+            Date[] dateAndTime= StagesDetail(stage.getDocumentNumber());
+            stage.setDate(dateAndTime[0]);
+            stage.setTime(dateAndTime[1]);
+            
+        }
+        return stages;
     }
 }
