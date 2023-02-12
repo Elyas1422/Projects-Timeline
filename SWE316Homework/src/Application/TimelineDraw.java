@@ -41,11 +41,7 @@ public class TimelineDraw {
     public static AnchorPane getTimeLineDraw(Project p) {
         ArrayList<ProjectStage> stages= p.getStages();
         int s= p.getDuration();
-        Text startDate=new Text(stages.get(0).toString());
-        startDate.setLayoutX(80);
-        startDate.setLayoutY(20);
         AnchorPane container= new AnchorPane();
-        //container.getChildren().add(startDate);
         HBox x= new HBox();
         x.setMinHeight(150);
         x.setMinWidth(800);
@@ -64,12 +60,16 @@ public class TimelineDraw {
             stageLine.setStartY(40);
             stageLine.setEndY(50);
             linebox.setLayoutY(30);
-            linebox.setLayoutX(100+600*(((1.0)*i)/s));
+            if (s==0)
+                linebox.setLayoutX(400);
+            else 
+                linebox.setLayoutX(100+600*(((1.0)*i)/s));
             linebox.getChildren().add(stageLine);
             linesList.add(linebox);
             container.getChildren().add(linebox);
             
         }
+        
         
         for (ProjectStage ps : stages) {
             int dif =differenceInDays( stages.get(0),  ps);
@@ -96,42 +96,4 @@ public class TimelineDraw {
     private static int differenceInDays(ProjectStage smaller, ProjectStage larger) {
         return (int) TimeUnit.MILLISECONDS.toDays(larger.getDate().getTime() - smaller.getDate().getTime());  
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
