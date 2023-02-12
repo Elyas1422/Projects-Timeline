@@ -31,7 +31,7 @@ public class App extends Application {
     public void start(Stage arg0) throws Exception {
         Scene scene = new Scene(getProjecstListView(ExcelFileReader.readProject()),800,400); 
         arg0.setResizable(false);
-        arg0.setTitle("SWE316 HW1");
+        arg0.setTitle("Projects Timeline");
         arg0.setScene(scene);
         arg0.show();
     }
